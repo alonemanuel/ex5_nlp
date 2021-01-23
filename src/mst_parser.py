@@ -4,12 +4,19 @@ import nltk
 import numpy as np
 from nltk.corpus import dependency_treebank
 
+from src.Chu_Liu_Edmonds_algorithm import max_spanning_arborescence_nx
 from src.utils import Printer
+
+COLS = 1
+
+1 = 1
 
 TRAIN_SET_RATIO = 0.9
 KEY_ADDRESS = 'address'
 KEY_TAG = 'tag'
 KEY_WORD = 'word'
+LR = 1
+N_ITER = 2
 
 
 def prime_nltk():
@@ -32,6 +39,7 @@ def get_train_and_test_sets():
 
 
 def compute_feature_vec():
+    Printer.greet_function('compute_feature_vec')
     word_bigram_vec = compute_word_bigrams_feature_vec()
     pos_bigram_vec = compute_pos_bigrams_feature_vec()
     feature_vec = np.concatenate((word_bigram_vec, pos_bigram_vec))
@@ -55,11 +63,43 @@ def get_word_bigram_feature_index(u: Dict, v: Dict, word_vocab: List):
     return index
 
 
-def get_pos_bigram_feature_index()
+def get_pos_bigram_feature_index():
     pass
 
 
 def compute_pos_bigrams_feature_vec():
+    pass
+
+
+def avg_perceptron(n_features, train_set, lr):
+    Printer.greet_function('avg_perceptron')
+    n_iter = N_ITER
+    n_examples = len(train_set)
+    n_steps = n_iter * n_examples
+    weights = np.zeros((n_features, n_steps))
+    for r in range(n_iter):
+        for i in range(n_examples):
+            best_tree = find_best_tree()
+            new_weights = find_new_weights(lr)
+            curr_step = r * n_examples + i
+            weights[:, curr_step] = new_weights
+    avg_weights = np.mean(weights, axis=COLS)
+    return avg_weights
+
+
+def find_best_tree():
+    Printer.greet_function('find_best_tree')
+    complete_graph = None
+    arcs = None
+    sink = None
+    best_tree = max_spanning_arborescence_nx(arcs, sink)
+
+    best_score = 0
+    best_tree = None
+    for
+
+
+def find_new_weights(prev_weights, lr):
     pass
 
 
@@ -88,11 +128,33 @@ def evaluate_tree(gold_tree, predicted_tree):
     return attachment_score
 
 
+def evaluate_model(weights, test_set):
+    Printer.greet_function('evaluate_learned_weights')
+    sum_score = 0
+    for sentence in test_set:
+        gold_tree = get_gold_tree_from_sentence()
+        pred_tree = predict_tree_from_sentence()
+        attachment_score = evaluate_tree(gold_tree, pred_tree)
+        sum_score += attachment_score
+    n_examples = len(test_set)
+    avg_score = sum_score / n_examples
+    return avg_score
+
+
+def train_model(train_set):
+    Printer.greet_function('train_model')
+    n_features = 0
+    lr = LR
+    weights = avg_perceptron(n_features, train_set, lr)
+
+
 def main():
     print(f'in main()...')
     # prime_nltk()
     train_set, test_set = get_train_and_test_sets()
     explore_data(train_set)
+    weights = train_model(train_set)
+    score = evaluate_model(weights)
 
 
 if __name__ == '__main__':
