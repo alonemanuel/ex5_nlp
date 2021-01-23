@@ -21,7 +21,7 @@ def min_spanning_arborescence_nx(arcs, sink):
         result[tail] = headtail2arc[(edge[0], edge[1])]
     return result
 
-def max_spanning_arborescence_nx(arcs, sink):
+def max_spanning_arborescence_nx(arcs):
     """
     Wrapper for the networkX min_spanning_tree to follow the original API
     :param arcs: list of Arc tuples
