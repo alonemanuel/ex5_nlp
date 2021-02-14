@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 import nltk
 from nltk.corpus import dependency_treebank
@@ -21,7 +21,6 @@ LR = 1
 N_ITER = 2
 
 
-
 class DataLoader:
     def __init__(self, data_source=dependency_treebank, train_set_ratio: float = TRAIN_SET_RATIO,
                  nltk_package_name='dependency_treebank'):
@@ -41,18 +40,18 @@ class DataLoader:
 
     def _preprocess_data(self) -> List[SentenceExample]:
         sentences = []
-        for sentence_graph in self._raw_data:
-            sentence_dict = sentence_graph
-            sentence_list: List[WordNode] = []
-            gold_tree: List[TreeEdge] = []
-            for j, word in sentence_dict.nodes.items():
+        for sentence_raw_dict in self._raw_data:
+            sentence_dict: Dict[int, WordNode] = dict()
+            gold_tree: Dict[int, TreeEdge] = dict()
+            # gold_tree: List[TreeEdge] = []
+            for j, word in sentence_raw_dict.nodes.items():
                 word_node = WordNode(word[KEY_ADDRESS], word[KEY_WORD], word[KEY_TAG])
-                sentence_list.append(word_node)
-                if j!=0:
+                sentence_dict[word[KEY_ADDRESS]] = word_node
+                if j != 0:
                     tree_edge = TreeEdge(word[KEY_HEAD], word[KEY_ADDRESS])
-                    gold_tree.append(tree_edge)
+                    gold_tree[word[KEY_ADDRESS]] = tree_edge
 
-            example = SentenceExample(sentence_list, gold_tree)
+            example = SentenceExample(sentence_dict, gold_tree)
             sentences.append(example)
 
         return sentences

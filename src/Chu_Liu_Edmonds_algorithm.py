@@ -1,3 +1,4 @@
+from typing import Dict
 from typing import List
 
 from networkx import DiGraph
@@ -25,7 +26,7 @@ def min_spanning_arborescence_nx(arcs, sink):
     return result
 
 
-def max_spanning_arborescence_nx(arcs: List[WordArc]) -> List[WordArc]:
+def max_spanning_arborescence_nx(arcs: List[WordArc]) -> Dict[int, TreeEdge]:
     """
     Wrapper for the networkX min_spanning_tree to follow the original API
     :param arcs: list of Arc tuples
@@ -36,9 +37,8 @@ def max_spanning_arborescence_nx(arcs: List[WordArc]) -> List[WordArc]:
     for arc in arcs:
         G.add_edge(arc.u_index, arc.v_index, weight=arc.weight)
     ARB = maximum_spanning_arborescence(G)
-    result = {}
-    headtail2arc = {(a.u_index, a.v_index): a for a in arcs}
+    tree = {}
     for edge in ARB.edges:
-        tail = edge[1]
-        result[tail] = headtail2arc[(edge[0], edge[1])]
-    return list(result.values())
+        u_index, v_index = edge[0], edge[1]
+        tree[v_index] = TreeEdge(u_index, v_index)
+    return tree
