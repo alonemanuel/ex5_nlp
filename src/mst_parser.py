@@ -145,13 +145,13 @@ class MSTParser:
         yield f'uv_abs_distance:{abs(u.index - v.index)}'
         yield f'u_tag:{u.tag},v_literal:{v.literal}'
         yield f'u_literal:{u.literal},v_tag:{v.tag}'
-        if u.literal is not None and u.literal in string.punctuation:
-            yield f'u_is_punctuation'
-        if v.literal is not None and v.literal in string.punctuation:
-            yield f'v_is_punctuation'
-        for i in range(min(u.index, v.index) + 1, max(u.index, v.index)):
-            if sentence[i].literal in string.punctuation:
-                yield f'has_punctuation_between'
+        # if u.literal is not None and u.literal in string.punctuation:
+        #     yield f'u_is_punctuation'
+        # if v.literal is not None and v.literal in string.punctuation:
+        #     yield f'v_is_punctuation'
+        # for i in range(min(u.index, v.index) + 1, max(u.index, v.index)):
+        #     if sentence[i].literal in string.punctuation:
+        #         yield f'has_punctuation_between'
 
     @staticmethod
     def _compute_attachment_score(pred_tree: Dict[int, TreeEdge], gold_tree: Dict[int, TreeEdge]) -> float:

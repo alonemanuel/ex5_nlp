@@ -1,7 +1,7 @@
 from src.data_loader import DataLoader
 from src.mst_parser import MSTParser
 
-N_EPOCHS = 3
+N_EPOCHS = 2
 LR = 1
 
 
